@@ -4,11 +4,11 @@
 
 import React from 'react';
 
-let RegInput = ({onChange, value, showErr, errMsg, onBlur}) => {
+let RegInput = ({onChange, value, hasErr, errMsg}) => {
   return (
     <div>
-      <input onChange={(e) => onChange(e)} value={value} onBlur={e => onBlur(e)}/>
-      {showErr && <div>{errMsg}</div>}
+      <input onChange={(e) => onChange(e)} value={value}/>
+      {hasErr && <div>{errMsg}</div>}
     </div>
   )
 };

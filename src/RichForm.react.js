@@ -8,9 +8,7 @@ export default class RichForm extends React.Component{
 
   constructor(props){
     super(props);
-    // {name, value, isValid}
     this.inputs = [];
-    this.formValidity = false;
   }
 
   getChildContext(){
@@ -33,45 +31,42 @@ export default class RichForm extends React.Component{
     })
   }
 
+  unmountInput(input){
+    const { name } = input.props;
+
+    let index = this.inputs.findIndex(i => i.name === name);
+
+    if(index  === -1){
+      console.error(`input with name ${name} isn't found`);
+      return;
+    }
+
+    this.inputs.splice(index, 1);
+  }
+
 
   /**
    *
    * @param { string } name The name of mutated input
    * @param { string }value The value of mutated input
-   * @param { boolean }isValid
+   * @param { string }errType The type of error
    * @param { Event } e
    *
    */
-  handleChildChange(name, value, isValid, e){
-    let input = null;
+  handleChildChange(name, value, errType, e){
+    let input = this.inputs.find(i => i.name === name);
 
-    input = this.inputs.find(i => i.name === name);
     if(!input){
       console.error(`No field of ${name} isn't found`);
       return;
     }
 
     input.value = value;
-    input.isValid = isValid;
+    input.isValid = true;
 
-    let canSubmit = this.inputs.reduce((acc, i) => acc && i.isValid, true);
-    this.emitStatus(this.state.canSubmit, canSubmit);
-    this.setState({canSubmit});
+    input.isValid = !errType;
 
-    this.props.onChange(this.getData());
-  }
-
-  getData(){
-    let data = {};
-    this.inputs.forEach(i => data[i.name] = i.value);
-    return data;
-  }
-
-  emitStatus(preStatus, nextStatus){
-    if(preStatus && !nextStatus)
-      this.props.onInvalid();
-    else if(!preStatus && nextStatus)
-      this.props.onValid();
+    this.props.onChange(this.inputs);
   }
 
   render(){
@@ -88,8 +83,6 @@ RichForm.childContextTypes = {
 };
 
 RichForm.propTypes = {
-  onValid: React.PropTypes.func.required,
-  onInvalid: React.PropTypes.func.required,
-  onChange: React.PropTypes.func.required,
+  onChange: React.PropTypes.func
 };
 

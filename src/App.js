@@ -9,9 +9,12 @@ import wrapInput from './FormWrapper';
 
 const App = () => {
   let EmailInput = wrapInput(RegInput);
+  let handleChange = data => {
+    console.log('change');
+  };
   return (
-    <RichForm onValid={() => console.log('valid')} onInvalid={() => console.log('invalid')} onChange={(data) => console.log('data changed')}>
-      <EmailInput name="email" format="" required errMsg="abc" showErrPhase="touched"/>
+    <RichForm onChange={data => handleChange(data)}>
+      <EmailInput name="email" format="\d+" required requiredErrorMsg="abc" formatErrorMsg="bcd" defaultValue="ab"/>
     </RichForm>
   );
 };
