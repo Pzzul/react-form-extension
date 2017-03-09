@@ -5,18 +5,8 @@
 import React from 'react';
 import RichForm from './RichForm.react';
 
-/**
- * The wrapped element must have following properties:
- * onChange: func
- * value: string
- * showErr: bool
- * errMsg: string
- *
- */
-
 let wrapInput = (Element) => {
   //TODO check Element props first
-  //TODO check properties in options
 
   return class extends React.Component{
 
@@ -25,7 +15,6 @@ let wrapInput = (Element) => {
       context.parentForm.mountInput(this);
       this.state = {
         value: "",
-        isTouched: false,
       };
       this.format = new RegExp(props.format);
     }
@@ -37,14 +26,13 @@ let wrapInput = (Element) => {
     static propTypes = {
       name: React.PropTypes.string.required,
       format: React.PropTypes.string,
-      errMsg: React.PropTypes.errMsg,
-      afterTouchedShowErr: React.PropTypes.bool,
+      requiredErrorMsg: React.PropTypes.string,
+      formatErrorMsg: React.PropTypes.string,
       required: React.PropTypes.bool,
     };
 
     /**
-     *
-     * @param e: Event
+     * @param { Event } e
      */
     handleChange(e){
 
@@ -54,10 +42,6 @@ let wrapInput = (Element) => {
 
       parentForm.handleChildChange(name, value, this.checkValidity(value), e);
       this.setState({value});
-    }
-
-    handleBlur(e){
-      this.setState({isTouched: true});
     }
 
     checkValidity(value){
@@ -80,7 +64,11 @@ let wrapInput = (Element) => {
       else
         showErr = !validity;
 
-      return <Element onChange={(e) => this.handleChange(e)} value={value} showErr={showErr} errMsg={errMsg} onBlur={e => this.handleBlur(e)}/>;
+      return (
+        <Element
+          onChange={(e) => this.handleChange(e)} value={value}
+          showErr={showErr} errMsg={errMsg}
+        />);
     }
   }
 };

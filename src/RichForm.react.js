@@ -36,10 +36,10 @@ export default class RichForm extends React.Component{
 
   /**
    *
-   * @param name: the name of mutated input
-   * @param value: the value of mutated input
-   * @param isValid: if the value is valid
-   * @param e: Event
+   * @param { string } name The name of mutated input
+   * @param { string }value The value of mutated input
+   * @param { boolean }isValid
+   * @param { Event } e
    *
    */
   handleChildChange(name, value, isValid, e){
